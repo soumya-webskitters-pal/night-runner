@@ -15,6 +15,10 @@ window.startJumper3D = function startJumper3D(THREE, GLTFLoader, DRACOLoader) {
   const gameGuide = document.querySelector("#gameGuide");
   const guideClose = document.querySelector("#guideClose");
   const guidePlay = document.querySelector("#guidePlay");
+  const runnerSelect = document.querySelector("#runnerSelect");
+  const runnerLoading = document.querySelector("#runnerLoading");
+  const runnerOptions = [...document.querySelectorAll(".runner-option")];
+  const runnerToggle = document.querySelector("#runnerToggle");
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x030706);
@@ -106,6 +110,9 @@ window.startJumper3D = function startJumper3D(THREE, GLTFLoader, DRACOLoader) {
   const loaderStartedAt = performance.now();
   let loadingCompleteScheduled = false;
   let guideWasRunning = false;
+  let runnerSelectionShown = false;
+  let selectedRunner = "tron";
+  let playerModel = null;
 
   function openGameGuide() {
     if (!gameGuide.hidden) return;
@@ -123,12 +130,39 @@ window.startJumper3D = function startJumper3D(THREE, GLTFLoader, DRACOLoader) {
     if (gameGuide.hidden) return;
     gameGuide.hidden = true;
     guideToggle.setAttribute("aria-expanded", "false");
+    if (!runnerSelectionShown && !state.gameOver) {
+      runnerSelectionShown = true;
+      openRunnerSelect();
+      return;
+    }
     if (!state.gameOver && state.playerReady && state.obstaclesReady) {
       state.running = true;
       playPlayerAction(runAction || idleAction);
       clock.getDelta();
     }
     guideToggle.focus();
+  }
+
+  function openRunnerSelect() {
+    if (!runnerSelect.hidden) return;
+    state.running = false;
+    playPlayerAction(idleAction || runAction);
+    runnerSelect.hidden = false;
+    runnerToggle.setAttribute("aria-expanded", "true");
+    runnerLoading.textContent = "";
+    window.requestAnimationFrame(() => {
+      runnerOptions.find((option) => option.dataset.runner === selectedRunner)?.focus();
+    });
+  }
+
+  function closeRunnerSelect() {
+    runnerSelect.hidden = true;
+    runnerToggle.setAttribute("aria-expanded", "false");
+    if (!state.gameOver && state.playerReady && state.obstaclesReady) {
+      state.running = true;
+      playPlayerAction(runAction || idleAction);
+      clock.getDelta();
+    }
   }
 
   function finishLoadingIfReady() {
@@ -688,11 +722,11 @@ window.startJumper3D = function startJumper3D(THREE, GLTFLoader, DRACOLoader) {
       const buildingMaterial = new THREE.MeshStandardMaterial({
         color: new THREE.Color().setHSL(
           0.39 + Math.random() * 0.05,
-          0.24,
-          0.07 + Math.random() * 0.06,
+          0.08,
+          0.012 + Math.random() * 0.018,
         ),
-        roughness: 0.7,
-        metalness: 0.35,
+        roughness: 0.96,
+        metalness: 0.04,
       });
       const building = mesh(
         new THREE.BoxGeometry(width, height, depth),
@@ -770,7 +804,11 @@ window.startJumper3D = function startJumper3D(THREE, GLTFLoader, DRACOLoader) {
     activePlayerAction = action;
   }
 
-  function loadPlayerModel() {
+  function loadPlayerModel(
+    source = "players/neon_runner_animations_set/scene.gltf",
+    runnerId = "tron",
+    onComplete = null,
+  ) {
     const loader = new GLTFLoader();
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath(
@@ -779,6 +817,7 @@ window.startJumper3D = function startJumper3D(THREE, GLTFLoader, DRACOLoader) {
     loader.setDRACOLoader(dracoLoader);
     const handleLoad = (gltf) => {
         const model = gltf.scene;
+        if (runnerId === "nicky") model.rotation.y += Math.PI;
         model.traverse((object) => {
           if (!object.isMesh) return;
           object.castShadow = true;
@@ -792,6 +831,10 @@ window.startJumper3D = function startJumper3D(THREE, GLTFLoader, DRACOLoader) {
         model.updateMatrixWorld(true);
         const scaledBounds = new THREE.Box3().setFromObject(model);
         model.position.y -= scaledBounds.min.y;
+
+        playerMixer?.stopAllAction();
+        if (playerModel) player.remove(playerModel);
+        playerModel = model;
         player.add(model);
 
         playerMixer = new THREE.AnimationMixer(model);
@@ -802,10 +845,36 @@ window.startJumper3D = function startJumper3D(THREE, GLTFLoader, DRACOLoader) {
                 clip.name.toLowerCase().includes(name.toLowerCase()),
               ),
           );
-        const idleClip = findClip("Idle");
-        const runClip = findClip("Sprint", "Run", "Walk");
-        const rollClip = findClip("Roll");
-        const jumpClip = findClip("Jump");
+        let idleClip;
+        let runClip;
+        let rollClip;
+        let jumpClip;
+        if (["nicky", "chacha", "zombie"].includes(runnerId)) {
+          idleClip = null;
+          runClip = gltf.animations[0] || null;
+          rollClip = null;
+          jumpClip = null;
+        } else if (runnerId === "tails") {
+          idleClip = null;
+          runClip = findClip("tl_run_loop", "tl_boost_loop");
+          rollClip = findClip("tl_jump_cannonball_loop");
+          jumpClip = findClip("tl_jump_fall_loop");
+        } else if (runnerId === "sonic") {
+          idleClip = null;
+          runClip = findClip("sn_run_loop", "sn_boost_loop");
+          rollClip = findClip("sn_ball_loop", "sn_ph_spin_start");
+          jumpClip = findClip(
+            "sn_springjump_loop",
+            "sn_jump_fall_loop",
+            "sn_jump",
+          );
+        } else {
+          idleClip = findClip("Idle");
+          runClip = findClip("Sprint", "Run", "Walk");
+          rollClip = findClip("Roll");
+          jumpClip = findClip("Jump");
+        }
+        activePlayerAction = null;
         idleAction = idleClip ? playerMixer.clipAction(idleClip) : null;
         runAction = runClip ? playerMixer.clipAction(runClip) : null;
         rollAction = rollClip ? playerMixer.clipAction(rollClip) : null;
@@ -816,23 +885,21 @@ window.startJumper3D = function startJumper3D(THREE, GLTFLoader, DRACOLoader) {
         }
 
         playPlayerAction(idleAction || runAction, 0);
+        selectedRunner = runnerId;
         state.playerReady = true;
         statusText.textContent = "Get ready";
         finishLoadingIfReady();
+        onComplete?.(true);
       };
     const handleError = (error) => {
-      console.error("Unable to load neon runner", error);
-      statusText.textContent = "Could not load neon runner";
+      console.error(`Unable to load ${runnerId} runner`, error);
+      statusText.textContent = `Could not load ${runnerId} runner`;
       state.playerReady = true;
       finishLoadingIfReady();
+      onComplete?.(false);
     };
 
-    loader.load(
-      "neon_runner_animations_set/scene.gltf",
-      handleLoad,
-      undefined,
-      handleError,
-    );
+    loader.load(source, handleLoad, undefined, handleError);
   }
 
   async function loadObstacleModels() {
@@ -1318,6 +1385,56 @@ window.startJumper3D = function startJumper3D(THREE, GLTFLoader, DRACOLoader) {
   guidePlay.addEventListener("click", closeGameGuide);
   gameGuide.addEventListener("click", (event) => {
     if (event.target === gameGuide) closeGameGuide();
+  });
+  runnerToggle.addEventListener("click", openRunnerSelect);
+  runnerOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+      const runnerId = option.dataset.runner;
+      if (runnerId === selectedRunner) {
+        closeRunnerSelect();
+        return;
+      }
+
+      runnerOptions.forEach((button) => {
+        button.disabled = true;
+      });
+      const runnerNames = {
+        tron: "Tron Legend",
+        sonic: "Sonic Blue",
+        tails: "Sonic Yellow",
+        nicky: "Nicky",
+        chacha: "Cha Cha",
+        zombie: "Diaper Zombie",
+      };
+      const runnerSources = {
+        tron: "players/neon_runner_animations_set/scene.gltf",
+        sonic:
+          "players/animations_sonic_-_sonic_runners_adventure_model/scene.gltf",
+        tails: "players/animations_tails_-_sonic_runners_adventure/scene.gltf",
+        nicky: "players/nicky/scene.gltf",
+        chacha: "players/cha_cha/scene.gltf",
+        zombie: "players/diaper_zombie/scene.gltf",
+      };
+      runnerLoading.textContent = `Loading ${runnerNames[runnerId]}…`;
+      const source = runnerSources[runnerId];
+      loadPlayerModel(source, runnerId, (loaded) => {
+        runnerOptions.forEach((button) => {
+          button.disabled = false;
+          const active = button.dataset.runner === selectedRunner;
+          button.classList.toggle("is-selected", active);
+          button.setAttribute("aria-pressed", String(active));
+          button.querySelector(".runner-check").textContent = active
+            ? "Selected"
+            : "Select";
+        });
+        if (loaded) {
+          runnerLoading.textContent = "";
+          closeRunnerSelect();
+        } else {
+          runnerLoading.textContent = "Runner could not be loaded. Choose another.";
+        }
+      });
+    });
   });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !gameGuide.hidden) {
