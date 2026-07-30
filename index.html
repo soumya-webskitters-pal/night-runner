@@ -16,7 +16,8 @@
     <meta name="theme-color" content="#061b11" />
     <meta name="color-scheme" content="dark" />
     <link rel="canonical" href="https://imaginative-blini-3595a1.netlify.app/" />
-    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="favicon.png" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Night Runner" />
@@ -29,13 +30,31 @@
       property="og:url"
       content="https://imaginative-blini-3595a1.netlify.app/"
     />
+    <meta
+      property="og:image"
+      content="https://imaginative-blini-3595a1.netlify.app/poster.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Night Runner neon 3D endless runner game"
+    />
     <meta property="og:locale" content="en_US" />
 
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Night Runner — Neon 3D Endless Runner" />
     <meta
       name="twitter:description"
       content="A fast neon endless runner built with Three.js. Jump, roll, and chase your best score."
+    />
+    <meta
+      name="twitter:image"
+      content="https://imaginative-blini-3595a1.netlify.app/poster.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Night Runner neon 3D endless runner game"
     />
 
     <script type="application/ld+json">
@@ -44,6 +63,7 @@
         "@type": "VideoGame",
         "name": "Night Runner",
         "url": "https://imaginative-blini-3595a1.netlify.app/",
+        "image": "https://imaginative-blini-3595a1.netlify.app/poster.png",
         "description": "A neon 3D endless runner built with Three.js.",
         "genre": ["Endless runner", "Arcade"],
         "gamePlatform": "Web browser",
@@ -56,7 +76,7 @@
       }
     </script>
     <title>Night Runner — Neon 3D Endless Runner</title>
-    <link rel="stylesheet" href="style.css?v=game-guide" />
+    <link rel="stylesheet" href="style.css?v=game-guide-credit" />
   </head>
   <body>
     <div class="loader-screen" id="loaderScreen" role="status" aria-live="polite">
@@ -166,6 +186,7 @@
             <div><span>Speed</span><strong>Starts at 5.8 and steadily reaches 13.3</strong></div>
           </div>
           <button class="guide-play" id="guidePlay" type="button">Start running</button>
+          <p class="guide-credit">Created by ChatGPT, story teller Soumya Pal</p>
         </div>
       </section>
     </main>
