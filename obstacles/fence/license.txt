@@ -1,0 +1,11 @@
+Model Information:
+* title:	Fence
+* source:	https://sketchfab.com/3d-models/fence-4d3f7dd97acf49b6bb4312680ec63916
+* author:	Cavalqs (https://sketchfab.com/Cavalqs)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Fence" (https://sketchfab.com/3d-models/fence-4d3f7dd97acf49b6bb4312680ec63916) by Cavalqs (https://sketchfab.com/Cavalqs) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

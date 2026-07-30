@@ -1,0 +1,11 @@
+Model Information:
+* title:	PUBG CRATE
+* source:	https://sketchfab.com/3d-models/pubg-crate-e95e6bbca085477db65ebf2b8773f67b
+* author:	Bhargav Gamit (https://sketchfab.com/bhargav.gamit001)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "PUBG CRATE" (https://sketchfab.com/3d-models/pubg-crate-e95e6bbca085477db65ebf2b8773f67b) by Bhargav Gamit (https://sketchfab.com/bhargav.gamit001) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

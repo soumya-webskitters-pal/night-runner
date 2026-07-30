@@ -1,0 +1,8 @@
+Model Information:
+* title:	Radiant P_BC1
+* source:	https://sketchfab.com/3d-models/radiant-p-bc1-9fc0e606a53a428487021743fc066d61
+* author:	capmare.david (https://sketchfab.com/capmare.david)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works
