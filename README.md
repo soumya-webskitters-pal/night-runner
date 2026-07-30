@@ -84,7 +84,7 @@ Running through a local server is required because the game loads JavaScript mod
 ## Credits
 
 Created by ChatGPT.  
-Hosted by Netlify
-vibe coder: Soumya Pal.
+Hosted by Netlify.
+Vibe coder: **Soumya Pal**.
 
 3D models and related assets retain the licensing terms included in their respective asset folders.
