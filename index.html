@@ -76,7 +76,7 @@
       }
     </script>
     <title>Night Runner — Neon 3D Endless Runner</title>
-    <link rel="stylesheet" href="style.css?v=game-guide-credit" />
+    <link rel="stylesheet" href="style.css?v=speaker-icon" />
   </head>
   <body>
     <div class="loader-screen" id="loaderScreen" role="status" aria-live="polite">
@@ -116,7 +116,9 @@
           aria-pressed="false"
           title="Toggle sound"
         >
-          <span aria-hidden="true">♪</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M4 9v6h4l5 4V5L8 9H4Zm12.2-.8a5.4 5.4 0 0 1 0 7.6l1.4 1.4a7.4 7.4 0 0 0 0-10.4l-1.4 1.4Zm-1.8 2a2.8 2.8 0 0 1 0 3.6l1.4 1.2a4.7 4.7 0 0 0 0-6l-1.4 1.2Z" />
+          </svg>
         </button>
         <button
           id="guideToggle"
@@ -128,6 +130,17 @@
           title="Game guide"
         >
           <span aria-hidden="true">💡</span>
+        </button>
+        <button
+          id="runnerToggle"
+          class="runner-toggle"
+          type="button"
+          aria-label="Select player"
+          aria-expanded="false"
+          aria-controls="runnerSelect"
+          title="Select player"
+        >
+          <span aria-hidden="true">●</span>
         </button>
       </aside>
 
@@ -189,13 +202,91 @@
           <p class="guide-credit">Created by ChatGPT, story teller Soumya Pal</p>
         </div>
       </section>
+
+      <section
+        class="runner-select"
+        id="runnerSelect"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="runnerSelectTitle"
+        hidden
+      >
+        <div class="runner-select-card">
+          <p class="guide-kicker">Choose your legend</p>
+          <h2 id="runnerSelectTitle">Select runner</h2>
+          <p class="runner-select-copy">Each runner uses their own animated 3D model.</p>
+          <div class="runner-options">
+            <button class="runner-option is-selected" type="button" data-runner="tron" aria-pressed="true">
+              <span class="runner-avatar runner-avatar-tron">
+                <img
+                  src="players/neon_runner_animations_set/player1.png"
+                  alt="Tron Legend runner preview"
+                />
+              </span>
+              <span class="runner-name">Tron Legend</span>
+              <span class="runner-detail">Neon runner · Default</span>
+              <span class="runner-check">Selected</span>
+            </button>
+            <button class="runner-option" type="button" data-runner="sonic" aria-pressed="false">
+              <span class="runner-avatar runner-avatar-sonic">
+                <img
+                  src="players/animations_sonic_-_sonic_runners_adventure_model/player 2.png"
+                  alt="Sonic Blue runner preview"
+                />
+              </span>
+              <span class="runner-name">Sonic Blue</span>
+              <span class="runner-detail">Sonic runners adventure</span>
+              <span class="runner-check">Select</span>
+            </button>
+            <button class="runner-option" type="button" data-runner="tails" aria-pressed="false">
+              <span class="runner-avatar runner-avatar-tails">
+                <img
+                  src="players/animations_tails_-_sonic_runners_adventure/player 3.png"
+                  alt="Sonic Yellow runner preview"
+                />
+              </span>
+              <span class="runner-name">Sonic Yellow</span>
+              <span class="runner-detail">Tails runners adventure</span>
+              <span class="runner-check">Select</span>
+            </button>
+            <button class="runner-option" type="button" data-runner="nicky" aria-pressed="false">
+              <span class="runner-avatar runner-avatar-nicky">
+                <img src="players/nicky/player4.png" alt="Nicky runner preview" />
+              </span>
+              <span class="runner-name">Nicky</span>
+              <span class="runner-detail">Casual city runner</span>
+              <span class="runner-check">Select</span>
+            </button>
+            <button class="runner-option" type="button" data-runner="chacha" aria-pressed="false">
+              <span class="runner-avatar runner-avatar-chacha">
+                <img src="players/cha_cha/player 5.png" alt="Cha Cha runner preview" />
+              </span>
+              <span class="runner-name">Cha Cha</span>
+              <span class="runner-detail">Street runner</span>
+              <span class="runner-check">Select</span>
+            </button>
+            <button class="runner-option" type="button" data-runner="zombie" aria-pressed="false">
+              <span class="runner-avatar runner-avatar-zombie">
+                <img
+                  src="players/diaper_zombie/player 6.png"
+                  alt="Diaper Zombie runner preview"
+                />
+              </span>
+              <span class="runner-name">Diaper Zombie</span>
+              <span class="runner-detail">Undead runner</span>
+              <span class="runner-check">Select</span>
+            </button>
+          </div>
+          <p class="runner-loading" id="runnerLoading" aria-live="polite"></p>
+        </div>
+      </section>
     </main>
 
     <p class="fps-meter" id="fpsMeter" aria-live="off">FPS 0</p>
     <p class="build-credit">Built with Three.js</p>
     <div class="vignette" aria-hidden="true"></div>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-    <script src="script.js?v=game-guide"></script>
+    <script src="script.js?v=nicky-facing-forward"></script>
     <script type="importmap">
       {
         "imports": {
